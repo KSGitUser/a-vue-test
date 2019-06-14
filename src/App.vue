@@ -12,7 +12,7 @@
     </v-toolbar>
 
     <v-content>
-      <HelloWorld />
+      <!-- <HelloWorld /> -->
       <ListOfAgents />
     </v-content>
   </v-app>

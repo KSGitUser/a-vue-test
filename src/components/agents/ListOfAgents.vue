@@ -28,7 +28,16 @@
                 <v-text-field v-model="editedItem.department" label="Department"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.dateOfRegistration" label="Date of Registration"></v-text-field>
+                <v-menu v-model="menu2" :close-on-content-click="false" :nudge-right="40" lazy
+                  transition="scale-transition" offset-y full-width min-width="290px">
+                  <template v-slot:activator="{ on }">
+                    <v-text-field v-model="editedItem.dateOfRegistration" label="Date of Registration"
+                      prepend-icon="event" readonly v-on="on"></v-text-field>
+                  </template>
+                  <v-date-picker v-model="editedItem.dateOfRegistration" @input="menu2 = false" locale="ru-ru"
+                    :first-day-of-week="1">
+                  </v-date-picker>
+                </v-menu>
               </v-flex>
             </v-layout>
           </v-container>
@@ -102,7 +111,7 @@
           surname: '',
           name: '',
           department: '',
-          dateOfRegistration: '',
+          dateOfRegistration: new Date().toISOString().substr(0, 10)
         },
         defaultItem: {
           id: '',
@@ -138,9 +147,12 @@
         //this.$store.commit('addRecord', this.editedItem)
         //this.close()
         if (this.editedIndex > -1) {
-          this.$store.commit('editRecord', this.editedItem)
+
+          this.$store.dispatch('editRecord', this.editedItem)
+          // this.$store.commit('editRecord', this.editedItem)
         } else {
-          this.$store.commit('addRecord', this.editedItem)
+          this.$store.dispatch('addRecord', this.editedItem)
+          //this.$store.commit('addRecord', this.editedItem)
         }
         this.close()
       },
@@ -159,7 +171,7 @@
       deleteItem(item) {
         const index = this.agents.indexOf(item)
         confirm('Are you sure you want to delete this item?') &&
-          this.$store.commit('deleteRecord', index);
+          this.$store.dispatch('deleteRecord', index)
       },
     }
   }
