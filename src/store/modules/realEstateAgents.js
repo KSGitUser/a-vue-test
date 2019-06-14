@@ -5,13 +5,16 @@ class Agents {
     surname,
     name,
     department,
-    dateOfRegistration
+    dateOfRegistration,
+    guid = '',
+    id = ''
   }) {
     this.guid = (this.S4() + this.S4() + "-" + this.S4() + "-4" + this.S4().substr(0, 3) + "-" + this.S4() + "-" + this.S4() + this.S4() + this.S4()).toLowerCase();
     this.surname = surname;
     this.name = name;
     this.department = department;
     this.dateOfRegistration = dateOfRegistration;
+    this.id = id;
   }
 
   S4() {
@@ -46,7 +49,7 @@ export default {
       department: 'new constructions',
       dateOfRegistration: '20/02/2019',
     }] */
-    agents: arrayOfAgents
+    agents: []
   },
   mutations: {
     addRecord(state, object) {
@@ -64,6 +67,9 @@ export default {
         return agent.id == object.id;
       });
       Object.assign(state.agents[indexOfObject], object);
+    },
+    loadData(state, object) {
+      state.agents = [...object];
     }
   },
   actions: {
@@ -74,13 +80,12 @@ export default {
         const newAgent = new Agents({
           ...payload
         })
+        delete newAgent.id;
         const agent = await firebase.database().ref('agents').push(newAgent)
         commit('addRecord', {
           ...newAgent,
           id: agent.key
         })
-
-        // commit('addRecord', payload)
       } catch (error) {
         alert(error.message)
         throw error
@@ -96,6 +101,31 @@ export default {
       commit
     }, payload) {
       commit('deleteRecord', payload)
+    },
+
+    async fetchData({
+      commit
+    }) {
+      const dataFromBase = []
+      try {
+        const agentsVal = await firebase.database().ref('agents').once('value')
+        const agents = agentsVal.val()
+        Object.keys(agents).forEach(key => {
+          const agent = agents[key]
+          agent.id = key;
+          dataFromBase.push(
+            new Agents({
+              ...agent
+            })
+          )
+          console.log(dataFromBase)
+          commit('loadData', dataFromBase)
+        })
+      } catch (error) {
+        alert(error.message)
+        throw error
+      }
+
     }
 
   },

@@ -75,6 +75,7 @@
   export default {
     data() {
       return {
+        menu2: false,
         dialog: false,
         search: '',
         headers: [{

@@ -23,5 +23,7 @@ new Vue({
     }
 
     firebase.initializeApp(firebaseConfig)
+
+    this.$store.dispatch('fetchData')
   }
 }).$mount('#app')
