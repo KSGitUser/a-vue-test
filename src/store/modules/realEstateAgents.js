@@ -24,31 +24,9 @@ class Agents {
 
 
 
-let arrayOfAgents = [];
-/*arrayOfAgents.push(
-  new Agents(
-    1,
-    "sdfsdffsdf343",
-    "Sankin",
-    "Alexandr",
-    "new constructions",
-    "20/02/2019"
-  )
-);
-arrayOfAgents.push(
-  new Agents(2, "sdfsfafassadf343", "Risev", "Sergey", "elite", "20/01/2019")
-); */
 
 export default {
   state: {
-    /* agents: [{
-      id: 1,
-      guid: 'sdfasfdaewr23423',
-      surname: 'Sankin',
-      name: 'Alexandr',
-      department: 'new constructions',
-      dateOfRegistration: '20/02/2019',
-    }] */
     agents: []
   },
   mutations: {
@@ -77,8 +55,12 @@ export default {
       commit
     }, payload) {
       try {
+        const {
+          departmentName,
+          ...newPayload
+        } = payload
         const newAgent = new Agents({
-          ...payload
+          ...newPayload
         })
         delete newAgent.id;
         const agent = await firebase.database().ref('agents').push(newAgent)
@@ -92,22 +74,49 @@ export default {
       }
 
     },
-    editRecord({
+    async editRecord({
       commit
     }, payload) {
-      commit('editRecord', payload)
-    },
-    deleteRecord({
-      commit
-    }, payload) {
-      commit('deleteRecord', payload)
+
+      try {
+        commit('setLoading', true)
+        const {
+          id,
+          departmentName,
+          ...objectToSave
+        } = payload
+
+        const agent = await firebase.database().ref('agents').child(payload.id).update(objectToSave)
+        commit('editRecord', payload)
+        commit('setLoading', true)
+      } catch (error) {
+        alert(error.message)
+        throw error
+      }
+
     },
 
-    async fetchData({
+    async deleteRecord({
+      commit
+    }, payload) {
+      try {
+        commit('setLoading', true)
+        await firebase.database().ref('agents').child(payload.item.id).remove()
+        commit('deleteRecord', payload.index)
+        commit('setLoading', false)
+      } catch (error) {
+        alert(error.message)
+        throw error
+      }
+
+    },
+
+    async fetchDataAgents({
       commit
     }) {
       const dataFromBase = []
       try {
+        commit('setLoading', true)
         const agentsVal = await firebase.database().ref('agents').once('value')
         const agents = agentsVal.val()
         Object.keys(agents).forEach(key => {
@@ -118,8 +127,8 @@ export default {
               ...agent
             })
           )
-          console.log(dataFromBase)
           commit('loadData', dataFromBase)
+          commit('setLoading', false)
         })
       } catch (error) {
         alert(error.message)
