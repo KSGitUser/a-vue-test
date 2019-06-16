@@ -88,7 +88,7 @@ export default {
 
         const agent = await firebase.database().ref('agents').child(payload.id).update(objectToSave)
         commit('editRecord', payload)
-        commit('setLoading', true)
+        commit('setLoading', false)
       } catch (error) {
         alert(error.message)
         throw error

@@ -22,6 +22,9 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-text-field v-model="search" append-icon="search" label="Поиск" single-line hide-details @input="searchInput">
+      </v-text-field>
+      <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn v-for="(link, i) in links" :key="i" :to="link.url" flat>
           <v-icon left>{{ link.icon}}</v-icon>
@@ -41,10 +44,14 @@
   export default {
     data() {
       return {
-        sideNav: false
+        sideNav: false,
+        search: ''
       }
     },
     methods: {
+      searchInput() {
+        this.$root.$emit('searchInput', this.search)
+      }
 
     },
     computed: {

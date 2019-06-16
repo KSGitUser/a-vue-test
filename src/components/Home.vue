@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="!loading">
     <v-layout row>
       <v-flex xs12>
         <h1>Home</h1>
@@ -21,6 +21,11 @@
     components: {
       ListOfAgents,
       NewDepartment
+    },
+    computed: {
+      loading() {
+        return this.$store.getters.loading
+      }
     }
 
   }

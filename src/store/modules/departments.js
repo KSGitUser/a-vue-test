@@ -72,7 +72,7 @@ export default {
 
           commit('loadDepartmentData', dataFromBase)
         })
-        commit('setLoading', false)
+        //    commit('setLoading', false)
 
       } catch (error) {
         alert(error.message)
