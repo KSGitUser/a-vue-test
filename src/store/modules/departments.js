@@ -32,12 +32,14 @@ export default {
     }, payload) {
       try {
         commit('setLoading', true)
-        console.log('payload', payload)
         const newDepartment = new Departments({
           ...payload
         })
-        delete newDepartment.id;
-        const department = await firebase.database().ref('departments').push(newDepartment)
+        const {
+          id,
+          ...departmentToAdd
+        } = newDepartment
+        const department = await firebase.database().ref('departments').push(departmentToAdd)
         commit('addDepartment', {
           id: department.key,
           ...newDepartment
@@ -72,7 +74,6 @@ export default {
 
           commit('loadDepartmentData', dataFromBase)
         })
-        //    commit('setLoading', false)
 
       } catch (error) {
         alert(error.message)

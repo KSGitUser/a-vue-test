@@ -69,7 +69,7 @@
     </v-layout>
     <v-layout row wrap fluid>
       <v-flex>
-        <v-text-field v-model="search" append-icon="search" label="Поиск по Фамилии" single-line hide-details>
+        <v-text-field v-model="search" append-icon="search" label="Поиск" single-line hide-details>
         </v-text-field>
       </v-flex>
       <v-spacer></v-spacer>
@@ -144,7 +144,7 @@
 
     <v-container fluid grid-list-md class="hidden-md-and-up" text-md-center>
       <v-data-iterator :items=" listAgents" :rows-per-page-items="rowsPerPageItems" :pagination.sync="pagination" row
-        wrap class="text-center" offset-sm2>
+        wrap class="text-center" offset-sm2 :search="search">
         <template v-slot:item="props">
           <v-layout row wrap fluid>
             <v-flex class="agent-card" xs12 sm6 md4 lg3 @dblclick="editItem(props.item)">
@@ -215,18 +215,7 @@
         menu2: false,
         dialog: false,
         search: '',
-        headers: [
-          /*{
-                      text: 'id',
-                      align: 'center',
-                      sortable: false,
-                      value: 'id'
-                    },
-                    {
-                      text: 'guid',
-                      value: 'guid'
-                    }, */
-          {
+        headers: [{
             text: 'Фамилия',
             value: 'surname',
             align: 'left'
@@ -292,36 +281,19 @@
       this.listAgents = listOfAgents
       this.listAgentsBeforeFilter = listOfAgents
 
-      this.$root.$on('searchInput', (search) => {
-        console.log('add some text to search - ', search)
+      const urlSearch = this.$route.query.search
 
-        if (search !== '') {
-          this.listAgents = this.listAgentsBeforeFilter.filter(item => {
-            search = search.toLowerCase()
-            return (
-              ~item.name.toLowerCase().indexOf(search) ||
-              ~item.surname.toLowerCase().indexOf(search) ||
-              ~item.departmentName.toLowerCase().indexOf(search)
-            )
-          })
-        } else {
-          this.listAgents = this.listAgentsBeforeFilter
-        }
+      if (urlSearch !== '') {
+        this.searchOfAgents(urlSearch)
+      }
+
+      this.$root.$on('keyPressed', (search) => {
+        this.searchOfAgents(search)
       })
 
 
     },
     computed: {
-
-      /*search: {
-        set: function (newValue) {
-          this.search = newValue
-        },
-        get: function () {
-          this.search
-        }
-
-      }, */
 
       agents() {
         return this.$store.getters.allAgents
@@ -339,9 +311,6 @@
         return this.$store.getters['getDepartmentName'](id)
       },
 
-      searchBySurname(value) {
-        console.log(val)
-      },
 
       loading() {
         return this.$store.getters.loading
@@ -362,17 +331,30 @@
 
     methods: {
 
+      searchOfAgents(search = '') {
+        if (search.trim() !== '') {
+          this.listAgents = this.listAgentsBeforeFilter.filter(item => {
+            search = search.toLowerCase().trim()
+            return (~item.name.toLowerCase().indexOf(search) ||
+              ~item.surname.toLowerCase().indexOf(search) ||
+              ~item.departmentName.toLowerCase().indexOf(search))
+          })
+        } else {
+          this.listAgents = this.listAgentsBeforeFilter
+        }
+      },
+
       save() {
 
         if (this.editedIndex > -1) {
-
           this.$store.dispatch('editRecord', this.editedItem)
         } else {
-
           this.$store.dispatch('addRecord', this.editedItem)
         }
+
         this.close()
       },
+
       close() {
         this.dialog = false
         setTimeout(() => {
@@ -380,23 +362,22 @@
           this.editedIndex = -1
         }, 300)
       },
+
       editItem(item) {
         this.editedIndex = this.agents.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
+
       deleteItem(item) {
         this.deletedItem = item
-        console.log('deleted item', item)
         this.deleteDialog = true
       },
 
       deleteConfirm() {
 
         const index = this.agents.indexOf(this.deletedItem)
-
         const item = this.deletedItem
-
         this.$store.dispatch('deleteRecord', {
           index,
           item

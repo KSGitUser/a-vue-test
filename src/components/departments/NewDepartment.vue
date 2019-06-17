@@ -38,7 +38,6 @@
     },
     methods: {
       submit() {
-        console.log('enter to submit method')
         this.$store.dispatch('addDepartment', this.department)
       }
     }

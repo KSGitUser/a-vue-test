@@ -22,9 +22,17 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-text-field v-model="search" append-icon="search" label="Поиск" single-line hide-details @input="searchInput"
-        class="hidden-xs-and-down">
-      </v-text-field>
+      <v-layout>
+        <v-text-field v-model="search" label="Интерактивный поиск по имени, фамилии, департаменту" single-line
+          hide-details @keyup="keyPressed" class="hidden-xs-and-down">
+
+        </v-text-field>
+        <v-flex align-self-end>
+          <v-icon @click="iconSearchClick">search</v-icon>
+        </v-flex>
+      </v-layout>
+
+
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn v-for="(link, i) in links" :key="i" :to="link.url" flat>
@@ -50,11 +58,24 @@
       }
     },
     methods: {
-      searchInput() {
-        this.$root.$emit('searchInput', this.search)
-      }
 
+      iconSearchClick() {
+        if (this.search !== '') {
+          if (this.$route !== '/') {
+            this.$root.$emit('keyPressed', this.search)
+            this.$router.push(`/?search=${this.search}`)
+          }
+        }
+
+      },
+      keyPressed(event) {
+        this.$root.$emit('keyPressed', this.search)
+        if (event.key == "Enter") {
+          this.iconSearchClick()
+        }
+      }
     },
+
     computed: {
       links() {
         return [{
@@ -69,7 +90,7 @@
           }
         ]
       }
-    }
+    },
   }
 </script>
 

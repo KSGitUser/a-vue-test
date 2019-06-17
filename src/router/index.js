@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-/* import ListOfAgents from '@/components/agents/ListOfAgents' */
 import Home from '@/components/Home'
 import NewAgent from '@/components/agents/NewAgent'
 

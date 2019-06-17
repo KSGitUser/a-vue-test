@@ -40,9 +40,7 @@ export default {
       state.agents.splice(index, 1);
     },
     editRecord(state, object) {
-      //console.log("object.id: ", object.id);
       let indexOfObject = state.agents.findIndex(agent => {
-        //console.log("agent.id: ", agent.id);
         return agent.id == object.id;
       });
       Object.assign(state.agents[indexOfObject], object);
@@ -102,7 +100,6 @@ export default {
     }, payload) {
       try {
         commit('setLoading', true)
-        console.log(payload)
         await firebase.database().ref('agents').child(payload.item.id).remove()
         commit('deleteRecord', payload.item.id)
         commit('setLoading', false)
