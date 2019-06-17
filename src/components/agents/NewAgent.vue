@@ -6,17 +6,17 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.surname" label="Фамилия"></v-text-field>
+                <v-text-field v-model="editedItem.surname" :rules="nameRules" label="Фамилия"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.name" label="Имя">
+                <v-text-field v-model="editedItem.name" label="Имя" :rules="nameRules">
 
                 </v-text-field>
               </v-flex>
               <v-flex xs12 sm6 d-flex>
 
                 <v-autocomplete v-model="editedItem.department" :items="departmentItems" label="Департамент"
-                  item-text="name" item-value="id" persistent-hint single-line>
+                  item-text="name" item-value="id" persistent-hint single-line :rules="nameRules">
 
                 </v-autocomplete>
               </v-flex>
@@ -56,6 +56,11 @@
       return {
         menu2: false,
         editedIndex: -1,
+        nameRules: [
+          v => !!v || `Нужно ввести значение`,
+          v => v.length >= this.nameMin || `Минимальная длина более ${this.nameMin} символов`
+        ],
+        nameMin: 2,
         editedItem: {
           id: '',
           guid: '',
@@ -93,18 +98,25 @@
     computed: {
       departmentItems() {
         return this.$store.getters.getAllDepartments;
-      }
+      },
+
+
+
     },
 
     methods: {
       save() {
+        if (this.editedItem.name !== '' &&
+          this.editedItem.surname !== '' &&
+          this.editedItem.department !== '' &&
+          this.editedItem.dateOfRegistration !== '') {
 
-        this.$store.dispatch('addRecord', this.editedItem)
-          .then(() => {
-            this.$router.push('/')
-          })
-          .catch(() => {})
-
+          this.$store.dispatch('addRecord', this.editedItem)
+            .then(() => {
+              this.$router.push('/')
+            })
+            .catch(() => {})
+        }
       },
       close() {
         this.$router.push('/')

@@ -346,12 +346,17 @@
 
       save() {
 
-        if (this.editedIndex > -1) {
-          this.$store.dispatch('editRecord', this.editedItem)
-        } else {
-          this.$store.dispatch('addRecord', this.editedItem)
-        }
+        if (this.editedItem.name !== '' &&
+          this.editedItem.surname !== '' &&
+          this.editedItem.department !== '' &&
+          this.editedItem.dateOfRegistration !== '') {
+          if (this.editedIndex > -1) {
+            this.$store.dispatch('editRecord', this.editedItem)
+          } else {
 
+            this.$store.dispatch('addRecord', this.editedItem)
+          }
+        }
         this.close()
       },
 
