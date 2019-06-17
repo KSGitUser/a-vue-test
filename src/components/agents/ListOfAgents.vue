@@ -144,31 +144,33 @@
 
     <v-container fluid grid-list-md class="hidden-md-and-up" text-md-center>
       <v-data-iterator :items=" listAgents" :rows-per-page-items="rowsPerPageItems" :pagination.sync="pagination" row
-        wrap class="text-center" offset-sm2 :search="search">
+        wrap :search="search">
         <template v-slot:item="props">
           <v-layout row wrap fluid>
-            <v-flex class="agent-card" xs12 sm6 md4 lg3 @dblclick="editItem(props.item)">
+            <v-flex class="agent-card" xs12 sm8 md4 lg3 @dblclick="editItem(props.item)">
               <v-card>
-                <v-card-title>
-                  <h4>Агент: {{props.item.name}} {{props.item.surname}}</h4>
+                <v-card-title class="indigo darken-4">
+                  <h4 class="white--text">Агент: {{props.item.name}} {{props.item.surname}}</h4>
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-list dense>
                   <v-list-tile>
                     <v-list-tile-content>Имя:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ props.item.name }}</v-list-tile-content>
+                    <v-list-tile-content class="justify-end text-right">{{ props.item.name }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Фамилия:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ props.item.surname }}</v-list-tile-content>
+                    <v-list-tile-content class="justify-end text-right">{{ props.item.surname }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Департамент:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ props.item.departmentName }}</v-list-tile-content>
+                    <v-list-tile-content class="justify-end text-right">{{ props.item.departmentName }}
+                    </v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Дата регистрации:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ props.item.dateOfRegistration }}</v-list-tile-content>
+                    <v-list-tile-content class="justify-end text-right">{{ props.item.dateOfRegistration }}
+                    </v-list-tile-content>
                   </v-list-tile>
                   <v-divider></v-divider>
                   <v-list-tile>
@@ -177,7 +179,7 @@
                         edit
                       </v-icon>
                     </v-list-tile-content>
-                    <v-list-tile-content class="align-end mr-4">
+                    <v-list-tile-content class="align-end mr-4 text-right">
                       <v-icon small @click="deleteItem(props.item)">
                         delete
                       </v-icon>
@@ -413,5 +415,10 @@
 <style scoped>
   .agent-card {
     margin: auto;
+  }
+
+  .text-right {
+    text-align: right;
+    align-items: flex-end;
   }
 </style>
