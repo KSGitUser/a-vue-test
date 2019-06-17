@@ -22,9 +22,9 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-layout>
+      <v-layout class="hidden-sm">
         <v-text-field v-model="search" label="Интерактивный поиск по имени, фамилии, департаменту" single-line
-          hide-details @keyup="keyPressed" class="hidden-xs-and-down">
+          hide-details @keyup="keyPressed">
 
         </v-text-field>
         <v-flex align-self-end>

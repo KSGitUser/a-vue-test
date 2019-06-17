@@ -41,11 +41,10 @@
           <v-btn color="blue darken-1" flat @click="close">Отмена</v-btn>
           <v-btn color="blue darken-1" flat @click="save">Записать</v-btn>
         </v-card-actions>
-        </v-card>
-        </v-dialog>
-      </v-flex>
 
       </v-flex>
+
+
     </v-layout>
   </v-container>
 </template>

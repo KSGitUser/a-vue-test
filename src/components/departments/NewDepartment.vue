@@ -11,7 +11,7 @@
           <v-text-field v-model="department.dateOfCreation" label="Дата создания" prepend-icon="event" readonly
             v-on="on">
           </v-text-field>
-          </v-text-field>
+
         </template>
         <v-date-picker v-model="department.dateOfCreation" @input="menu2 = false" locale="ru-ru" :first-day-of-week="1">
         </v-date-picker>

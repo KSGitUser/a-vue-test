@@ -1,15 +1,25 @@
 <template>
-  <v-container>
-    <v-layout row>
-      <v-flex xs12 v-if="!loading">
-        <List-of-agents />
-        <!-- <New-department /> -->
-      </v-flex>
-      <v-flex v-else>
-        <v-progress-circular indeterminate color="primary" class="text-xs-center"></v-progress-circular>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <div v-if="!loading">
+    <v-container>
+      <v-layout row>
+        <v-flex xs12>
+          <List-of-agents />
+          <!-- <New-department /> -->
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
+  <div v-else>
+    <v-container>
+      <v-layout row>
+        <v-flex xs12 class="text-xs-center pt-5">
+          <v-progress-circular :size="100" :width="4" color="teal lighten-3" indeterminate>
+          </v-progress-circular>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
+
 </template>
 
 <script>
