@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-xl>
-    <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
+    <v-layout row wrap>
+      <v-flex xs12 sm6>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
@@ -38,8 +38,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click="close">Отмена</v-btn>
-          <v-btn color="blue darken-1" flat @click="save">Записать</v-btn>
+          <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+          <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
         </v-card-actions>
         </v-card>
         </v-dialog>
@@ -99,15 +99,14 @@
     methods: {
       save() {
 
-        this.$store.dispatch('addRecord', this.editedItem)
-          .then(() => {
-            this.$router.push('/')
-          })
-          .catch(() => {})
+        if (this.editedIndex > -1) {
 
-      },
-      close() {
-        this.$router.push('/')
+          this.$store.dispatch('editRecord', this.editedItem)
+        } else {
+
+          this.$store.dispatch('addRecord', this.editedItem)
+        }
+        this.close()
       },
     }
 

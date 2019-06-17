@@ -35,7 +35,8 @@ export default {
       state.agents.push(object);
 
     },
-    deleteRecord(state, index) {
+    deleteRecord(state, id) {
+      const index = state.agents.findIndex(agent => agent.id == id)
       state.agents.splice(index, 1);
     },
     editRecord(state, object) {
@@ -101,8 +102,9 @@ export default {
     }, payload) {
       try {
         commit('setLoading', true)
+        console.log(payload)
         await firebase.database().ref('agents').child(payload.item.id).remove()
-        commit('deleteRecord', payload.index)
+        commit('deleteRecord', payload.item.id)
         commit('setLoading', false)
       } catch (error) {
         alert(error.message)

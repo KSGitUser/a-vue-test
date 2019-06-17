@@ -22,7 +22,8 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-text-field v-model="search" append-icon="search" label="Поиск" single-line hide-details @input="searchInput">
+      <v-text-field v-model="search" append-icon="search" label="Поиск" single-line hide-details @input="searchInput"
+        class="hidden-xs-and-down">
       </v-text-field>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
